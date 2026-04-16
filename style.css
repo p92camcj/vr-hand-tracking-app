@@ -1,0 +1,210 @@
+:root {
+    --neon-blue: #00f2ff;
+    --neon-pink: #ff00ff;
+    --neon-green: #39ff14;
+    --neon-yellow: #ffff00;
+    --dark-bg: #030712;
+    --glass: rgba(15, 23, 42, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --font-main: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+    box-sizing: border-box;
+    cursor: none; /* Cursor oculto, usamos la mano en VR */
+}
+
+body, html {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background-color: var(--dark-bg);
+    color: white;
+    font-family: var(--font-main);
+}
+
+#input_video { 
+    position: absolute;
+    visibility: hidden;
+    width: 1px; height: 1px;
+}
+
+#output_canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: 1;
+    transform: scaleX(-1); /* Espejo */
+}
+
+/* Linter Screens */
+#loading-screen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: var(--dark-bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    gap: 1.5rem;
+}
+
+.loader {
+    width: 60px; height: 60px;
+    border: 4px solid rgba(255, 255, 255, 0.05);
+    border-top: 4px solid var(--neon-blue);
+    border-radius: 50%;
+    animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    box-shadow: 0 0 15px var(--neon-blue);
+}
+
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* HUD Design */
+#hud {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 10;
+    pointer-events: none; /* Dejar pasar eventos al canvas si fuera necesario, aunque el HUD tendrá sus botones */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2rem;
+}
+
+.hud-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    color: white;
+}
+
+.logo span {
+    color: var(--neon-blue);
+    text-shadow: 0 0 10px var(--neon-blue);
+}
+
+#status-indicator {
+    background: var(--glass);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    padding: 0.5rem 1rem;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.dot {
+    width: 8px; height: 8px;
+    background: #475569;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-green);
+}
+
+.status-text {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+}
+
+.glass {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    pointer-events: auto;
+}
+
+.hud-bottom {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.tool-palette {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.tool {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.tool:hover {
+    transform: scale(1.1);
+}
+
+.tool.active {
+    border-color: white;
+    box-shadow: 0 0 15px currentColor;
+    transform: scale(1.2);
+}
+
+.tool[data-color="#00f2ff"] { background: var(--neon-blue); color: var(--neon-blue); }
+.tool[data-color="#ff00ff"] { background: var(--neon-pink); color: var(--neon-pink); }
+.tool[data-color="#39ff14"] { background: var(--neon-green); color: var(--neon-green); }
+.tool[data-color="#ffff00"] { background: var(--neon-yellow); color: var(--neon-yellow); }
+
+.separator {
+    width: 1px; height: 24px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0 0.5rem;
+}
+
+.icon-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    width: 40px; height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.icon-btn svg {
+    width: 20px; height: 20px;
+}
+
+#gesture-hint {
+    position: absolute;
+    right: 2rem;
+    bottom: 4rem;
+    padding: 1rem 1.5rem;
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+#gesture-hint p {
+    margin: 0.5rem 0;
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon VR Hand Studio</title>
+    
+    <!-- MediaPipe Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="loading-screen">
+        <div class="loader"></div>
+        <p>Iniciando Motor VR...</p>
+    </div>
+
+    <!-- Background Layer (Camera Input Hidden) -->
+    <video id="input_video" playsinline></video>
+    
+    <!-- HUD Layer -->
+    <div id="hud">
+        <div class="hud-header">
+            <div class="logo">NEON<span>VR</span></div>
+            <div id="status-indicator">
+                <span class="dot"></span>
+                <span class="status-text">ESPERANDO MANO...</span>
+            </div>
+        </div>
+
+        <div class="hud-bottom">
+            <div class="tool-palette glass">
+                <div class="tool active" data-color="#00f2ff" title="Neon Blue"></div>
+                <div class="tool" data-color="#ff00ff" title="Cyber Pink"></div>
+                <div class="tool" data-color="#39ff14" title="Toxic Green"></div>
+                <div class="tool" data-color="#ffff00" title="Laser Yellow"></div>
+                <div class="separator"></div>
+                <button id="undo-btn" class="icon-btn" title="Deshacer">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h10a5 5 0 0 1 0 10H3M3 10l4-4M3 10l4 4"/></svg>
+                </button>
+                <button id="clear-btn" class="icon-btn" title="Limpiar Todo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
+            </div>
+        </div>
+        
+        <div id="gesture-hint" class="glass">
+            <p>☝️ Índice arriba: Dibujar</p>
+            <p>🤏 Pinza: Mover trazo</p>
+        </div>
+    </div>
+
+    <canvas id="output_canvas"></canvas>
+
+    <script src="main.js"></script>
+</body>
+</html>
